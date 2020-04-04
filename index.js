@@ -72,7 +72,9 @@ const main = async () => {
     let data = await fetchData()
     let now = Date.now()
 
-    if (data.online && data.online > 0) {
+    if (!data) {
+      console.log('failed to connect to server :/')
+    } else if (data.online && data.online > 0) {
       lastActive = Date.now()
 
       console.log(`server active with ${data.online} players`)
