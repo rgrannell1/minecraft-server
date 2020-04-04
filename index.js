@@ -74,7 +74,7 @@ const main = async () => {
     console.log(`${timestamp()}: failed to connect to server`)
 
     const tasks = await psList()
-    console.log(tasks)
+    console.log(tasks.map(d => d.name))
 
   } else if (serverData.online && serverData.online > 0) {
 
