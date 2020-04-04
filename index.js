@@ -9,7 +9,7 @@ const constants = {
 }
 
 const timestamp = () => {
-  return dayjs().format('MM-DD HH:mm:ss')
+  return dayjs().format('YYYY-MM-DD HH:mm:ss')
 }
 
 const parseData = data => {
@@ -89,9 +89,7 @@ const main = async () => {
     }
   }
 
-  setTimeout(() => {
-    main()
-  }, 15000)
+  setTimeout(() => main(), 15000)
 }
 
 main()
