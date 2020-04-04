@@ -1,16 +1,15 @@
 
-const SHUTDOWN_TIMER = 30 * 60 * 1000
+const MinecraftQuery = require('minecraft-query')
+const dayjs = require('dayjs')
 
 const constants = {
   timers: {
-    shutdownMs: 30 * 60 * 1000
+    shutdownMs: 20 * 60 * 1000
   }
 }
 
-const MinecraftQuery = require('minecraft-query')
-
 const timestamp = () => {
-  return ``
+  return dayjs().format('MM-DD HH:mm:ss')
 }
 
 const parseData = data => {
@@ -59,30 +58,28 @@ const fetchData = async () => {
   }
 }
 
-const stall = num => {
-  return new Promise(resolve => {
-    setTimeout(() => {
-      resolve()
-    }, num)
-  })
+const state = {
+  lastActive: Date.now()
 }
-
-let lastActive = Date.now()
 
 const main = async () => {
   console.log('polling local server for user-counts')
 
-  let data = await fetchData()
+  let serverData = await fetchData()
   let now = Date.now()
-  timeout
-  if (!data) {
-    console.log(`${timestamp()}: failed to connect to server :/`)
-  } else if (data.online && data.online > 0) {
-    lastActive = Date.now()
 
-    console.log(`${timestamp()}: server active with ${data.online} players`)
+  if (!serverData) {
+
+    console.log(`${timestamp()}: failed to connect to server`)
+
+  } else if (serverData.online && serverData.online > 0) {
+
+    state.lastActive = Date.now()
+    console.log(`${timestamp()}: server active with ${serverData.online} players`)
+
   } else {
-    let diffMs = now - lastActive
+
+    let diffMs = now - state.lastActive
     let remainingSeconds = (constants.timers.shutdownMs - diffMs) / 1000
 
     console.log(`${timestamp()}: server inactive; shutting down in ${remainingSeconds} seconds`)
