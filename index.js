@@ -1,4 +1,6 @@
 
+const SHUTDOWN_TIMER = 30 * 60 * 1000
+
 const MinecraftQuery = require('minecraft-query')
 
 const parseData = data => {
@@ -59,15 +61,21 @@ let lastActive = Date.now()
 
 const main = async () => {
   while (true) {
-    const data = await fetchData()
+    let data = await fetchData()
+    let now = Date.now()
 
     if (data.online && data.online > 0) {
       lastActive = Date.now()
 
       console.log(`server active with ${data.online} players`)
-
     } else {
-      console.error('shutting down server soon!')
+      let diff = now - lastActive
+
+      console.log(`server inactive; shutting down in ${SHUTDOWN_TIMER - diff} seconds`)
+
+      if (diff > SHUTDOWN_TIMER) {
+        console.log(`server inactive; shutting down NOW`)
+      }
     }
 
     console.log(data)
