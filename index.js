@@ -76,7 +76,7 @@ const handleInactiveState = state => {
   if (diffMs > constants.timers.shutdownMs) {
     console.log(`${timestamp()}: server inactive; shutting down NOW`)
 
-    exec('shutdown now', (err, stdout, stderr) {
+    exec('shutdown now', (err, stdout, stderr) => {
       if (err) {
         console.error(err)
         process.exit(1)
