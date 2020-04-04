@@ -1,5 +1,6 @@
 
 const MinecraftQuery = require('minecraft-query')
+const { snapshot } = require('process-list')
 const dayjs = require('dayjs')
 
 const constants = {
@@ -71,6 +72,9 @@ const main = async () => {
   if (!serverData) {
 
     console.log(`${timestamp()}: failed to connect to server`)
+
+    const tasks = await snapshot('pid', 'name')
+    console.log(tasks)
 
   } else if (serverData.online && serverData.online > 0) {
 
