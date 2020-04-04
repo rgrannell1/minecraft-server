@@ -80,7 +80,7 @@ const main = async () => {
 
     console.log(data)
 
-    await stall(60 * 1000)
+    await stall(30 * 1000)
   }
 }
 
