@@ -71,7 +71,7 @@ const main = async () => {
     } else {
       let diff = now - lastActive
 
-      console.log(`server inactive; shutting down in ${SHUTDOWN_TIMER - diff} seconds`)
+      console.log(`server inactive; shutting down in ${(SHUTDOWN_TIMER - diff) / 1000} seconds`)
 
       if (diff > SHUTDOWN_TIMER) {
         console.log(`server inactive; shutting down NOW`)
