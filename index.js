@@ -7,7 +7,7 @@ const {exec} = require('child_process')
 
 const constants = {
   timers: {
-    shutdownMs: 20 * 60 * 1000
+    shutdownMs: 2 * 60 * 1000
   },
   host: '0.0.0.0',
   port: 25565
@@ -73,12 +73,12 @@ const handleInactiveState = state => {
   let diffMs = now - state.lastActive
   let remainingSeconds = (constants.timers.shutdownMs - diffMs) / 1000
 
-  console.log(`${timestamp()}: server inactive; shutting down in ${remainingSeconds / 60} minutes`)
+  console.log(`${timestamp()}: server inactive; shutting down in ${Math.ceil(remainingSeconds / 60)} minutes`)
 
   if (diffMs > constants.timers.shutdownMs) {
     console.log(`${timestamp()}: server inactive; shutting down NOW`)
 
-    exec('shutdown now', (err, stdout, stderr) => {
+    exec('poweroff', (err, stdout, stderr) => {
       if (err) {
         console.error(err)
         process.exit(1)
