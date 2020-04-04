@@ -65,6 +65,9 @@ const main = async () => {
 
     if (data.online && data.online > 0) {
       lastActive = Date.now()
+
+      console.log(`server active with ${data.online} players`)
+
     } else {
       console.error('shutting down server soon!')
     }
