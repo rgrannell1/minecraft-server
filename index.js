@@ -59,8 +59,6 @@ let lastActive = Date.now()
 
 const main = async () => {
   while (true) {
-    await stall(60 * 1000)
-
     const data = await fetchData()
 
     if (data.online && data.online > 0) {
@@ -73,6 +71,8 @@ const main = async () => {
     }
 
     console.log(data)
+
+    await stall(60 * 1000)
   }
 }
 
