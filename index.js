@@ -46,12 +46,12 @@ const fetchData = async () => {
 
   try {
     const data = await query.basicStat()
-    query.close()
+    await query.close()
     return parseData(data)
   } catch (err) {
     console.error(`failed to retrieve stats from server.\n`)
     console.error(err.message)
-    query.close
+    await query.close()
   }
 }
 
@@ -68,29 +68,29 @@ let lastActive = Date.now()
 const main = async () => {
   console.log('polling local server for user-counts')
 
-  while (true) {
-    let data = await fetchData()
-    let now = Date.now()
+  let data = await fetchData()
+  let now = Date.now()
 
-    if (!data) {
-      console.log('failed to connect to server :/')
-    } else if (data.online && data.online > 0) {
-      lastActive = Date.now()
+  if (!data) {
+    console.log('failed to connect to server :/')
+  } else if (data.online && data.online > 0) {
+    lastActive = Date.now()
 
-      console.log(`server active with ${data.online} players`)
-    } else {
-      let diffMs = now - lastActive
-      let remainingSeconds = (constants.timers.shutdownMs - diffMs) / 1000
+    console.log(`server active with ${data.online} players`)
+  } else {
+    let diffMs = now - lastActive
+    let remainingSeconds = (constants.timers.shutdownMs - diffMs) / 1000
 
-      console.log(`server inactive; shutting down in ${remainingSeconds} seconds`)
+    console.log(`server inactive; shutting down in ${remainingSeconds} seconds`)
 
-      if (diffMs > constants.timers.shutdownMs) {
-        console.log(`server inactive; shutting down NOW`)
-      }
+    if (diffMs > constants.timers.shutdownMs) {
+      console.log(`server inactive; shutting down NOW`)
     }
-
-    await stall(30 * 1000)
   }
+
+  setTimeout(() => {
+    main()
+  }, 15000)
 }
 
 main()
