@@ -68,6 +68,8 @@ const state = {
 }
 
 const handleInactiveState = state => {
+  let now = Date.now()
+
   let diffMs = now - state.lastActive
   let remainingSeconds = (constants.timers.shutdownMs - diffMs) / 1000
 
@@ -93,10 +95,9 @@ const main = async () => {
 
   // -- todo check if server is online
   const tasks = await psList()
-  console.log(tasks.map(d => d.name))
+  //console.log(tasks.map(d => d.name))
 
   let serverData = await fetchServerData()
-  let now = Date.now()
 
   if (!serverData) {
     // -- could not retrieve query data
