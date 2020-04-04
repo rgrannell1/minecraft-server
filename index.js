@@ -73,7 +73,7 @@ const handleInactiveState = state => {
   let diffMs = now - state.lastActive
   let remainingSeconds = (constants.timers.shutdownMs - diffMs) / 1000
 
-  console.log(`${timestamp()}: server inactive; shutting down in ${remainingSeconds} seconds`)
+  console.log(`${timestamp()}: server inactive; shutting down in ${remainingSeconds / 60} minutes`)
 
   if (diffMs > constants.timers.shutdownMs) {
     console.log(`${timestamp()}: server inactive; shutting down NOW`)
