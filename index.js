@@ -1,6 +1,12 @@
 
 const SHUTDOWN_TIMER = 30 * 60 * 1000
 
+const constants = {
+  timers: {
+    shutdownMs: 30 * 60 * 1000
+  }
+}
+
 const MinecraftQuery = require('minecraft-query')
 
 const parseData = data => {
@@ -60,6 +66,8 @@ const stall = num => {
 let lastActive = Date.now()
 
 const main = async () => {
+  console.log('polling local server for user-counts')
+
   while (true) {
     let data = await fetchData()
     let now = Date.now()
@@ -69,16 +77,15 @@ const main = async () => {
 
       console.log(`server active with ${data.online} players`)
     } else {
-      let diff = now - lastActive
+      let diffMs = now - lastActive
+      let remainingSeconds = (constants.timers.shutdownMs - diffMs) / 1000
 
-      console.log(`server inactive; shutting down in ${(SHUTDOWN_TIMER - diff) / 1000} seconds`)
+      console.log(`server inactive; shutting down in ${remainingSeconds} seconds`)
 
-      if (diff > SHUTDOWN_TIMER) {
+      if (diffMs > constants.timers.shutdownMs) {
         console.log(`server inactive; shutting down NOW`)
       }
     }
-
-    console.log(data)
 
     await stall(30 * 1000)
   }
