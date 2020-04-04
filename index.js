@@ -66,6 +66,9 @@ const state = {
 const main = async () => {
   console.log('polling local server for user-counts')
 
+  const tasks = await psList()
+  console.log(tasks.map(d => d.name))
+
   let serverData = await fetchData()
   let now = Date.now()
 
@@ -73,8 +76,6 @@ const main = async () => {
 
     console.log(`${timestamp()}: failed to connect to server`)
 
-    const tasks = await psList()
-    console.log(tasks.map(d => d.name))
 
   } else if (serverData.online && serverData.online > 0) {
 
