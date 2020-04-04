@@ -9,9 +9,13 @@ const constants = {
 
 const MinecraftQuery = require('minecraft-query')
 
+const timestamp = () => {
+  return ``
+}
+
 const parseData = data => {
   if (!data.hasOwnProperty('online_players')) {
-    console.error('online_player data missing');
+    console.error(`${timestamp}: online_player data missing`)
 
     return {
       online: null
@@ -28,7 +32,7 @@ const parseData = data => {
     } else {
     }
   } catch (err) {
-    console.error('failed to parse data')
+    console.error(`${timestamp()}: failed to parse data`)
     console.error(err.message)
   }
 
@@ -49,7 +53,7 @@ const fetchData = async () => {
     await query.close()
     return parseData(data)
   } catch (err) {
-    console.error(`failed to retrieve stats from server.\n`)
+    console.error(`${timestamp()}: failed to retrieve stats from server.\n`)
     console.error(err.message)
     await query.close()
   }
@@ -70,21 +74,21 @@ const main = async () => {
 
   let data = await fetchData()
   let now = Date.now()
-
+  timeout
   if (!data) {
-    console.log('failed to connect to server :/')
+    console.log(`${timestamp()}: failed to connect to server :/`)
   } else if (data.online && data.online > 0) {
     lastActive = Date.now()
 
-    console.log(`server active with ${data.online} players`)
+    console.log(`${timestamp()}: server active with ${data.online} players`)
   } else {
     let diffMs = now - lastActive
     let remainingSeconds = (constants.timers.shutdownMs - diffMs) / 1000
 
-    console.log(`server inactive; shutting down in ${remainingSeconds} seconds`)
+    console.log(`${timestamp()}: server inactive; shutting down in ${remainingSeconds} seconds`)
 
     if (diffMs > constants.timers.shutdownMs) {
-      console.log(`server inactive; shutting down NOW`)
+      console.log(`${timestamp()}: server inactive; shutting down NOW`)
     }
   }
 
