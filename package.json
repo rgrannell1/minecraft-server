@@ -6,11 +6,22 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rgrannell1/mn-shutdown.git"
+  },
   "author": "",
   "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/rgrannell1/mn-shutdown/issues"
+  },
+  "homepage": "https://github.com/rgrannell1/mn-shutdown#readme",
   "dependencies": {
-    "dayjs": "^1.8.23",
-    "minecraft-query": "^1.0.9",
-    "ps-list": "^7.0.0"
+    "chalk": "^4.0.0",
+    "digitalocean": "^1.2.0",
+    "docopt": "^0.6.2",
+    "dotenv": "^8.2.0",
+    "neodoc": "^2.0.2",
+    "node-fetch": "^2.6.0"
   }
 }

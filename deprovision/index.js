@@ -91,6 +91,8 @@ const handleInactiveState = state => {
 }
 
 const main = async () => {
+  process.getuid()
+
   console.log('polling local server for user-counts')
 
   // -- todo check if server is online
