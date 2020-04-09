@@ -7,7 +7,7 @@ const chalk = require('chalk')
 const constants = require('../commons/constants')
 
 const actions = {
-  recreateDroplet: require('../app/recreate-droplet')
+  createDroplet: require('./create-droplet')
 }
 
 const preprocess = {}
@@ -38,9 +38,14 @@ const api = token => ({ method = 'GET', path, headers }) => {
 
 const minecraftServer = async args => {
   const env = await preprocess.env()
-
   const client = api(env.TOKEN)
-  await actions.recreateDroplet(client)
+
+  if (args.create) {
+    await actions.createDroplet(client)
+  } else if (args.destroy) {
+    await actions.destroyDroplet(client)
+  }
+
 }
 
 module.exports = minecraftServer

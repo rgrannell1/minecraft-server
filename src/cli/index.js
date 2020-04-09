@@ -4,7 +4,8 @@ const minecraftServer = require('../app/minecraft-server')
 
 const docs = `
 Usage:
-  mineserver
+  mineserver create
+  mineserver destroy
 `
 
 const args = docopt(docs)
