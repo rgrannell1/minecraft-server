@@ -1,6 +1,3 @@
-# minecraft
+# minecraft-server
 
-
-```
-chmod 644 /etc/systemd/servicename
-```
+Code to deploy a minecraft server
