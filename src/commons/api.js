@@ -1,5 +1,7 @@
 
+const fs = require('fs').promises
 const constants = require('../commons/constants')
+const clic = require('cloud-init-compile')
 
 const api = {}
 
@@ -52,7 +54,6 @@ api.snapshot = async (id, snapshotName, client) => {
   if (!res.ok) {
     throw res
   }
-
 }
 
 api.listSnapshots = async (client) => {
@@ -82,12 +83,20 @@ api.listKeys = async client => {
 }
 
 api.createDroplet = async (image, key, client) => {
+  const content = await clic.api({
+    gzip: false,
+    fpaths: [
+      'src/user-data/main.sh'
+    ],
+    toRun: 'main.sh'
+  })
+
   const body = {
     ...constants.vmConfig,
     image: image.id,
-    ssh_keys: [key.id]
+    ssh_keys: [key.id],
+    user_data: content
   }
-
 
   const res = await client({
     method: 'POST',
@@ -106,7 +115,7 @@ api.updateSnapshot = async () => {
 
 }
 
-api.shutdownVM = async () => {
+api.shutdownDroplet = async () => {
 
 }
 

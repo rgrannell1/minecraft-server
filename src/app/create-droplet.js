@@ -32,6 +32,13 @@ const getSnapshot = async (client) => {
   return sorted[0]
 }
 
+/**
+ * Attempts to restore a snapshot, but will provision a server
+ * from scratch if this snapshot does not exist.
+ *
+ *
+ * @param {*} client
+ */
 const recreateDroplet = async client => {
   const existingDroplet = await api.getDroplet(constants.vms.name, client)
   const snapshot = await getSnapshot(client)
