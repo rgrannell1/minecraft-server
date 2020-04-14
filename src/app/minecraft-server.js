@@ -26,13 +26,20 @@ preprocess.env = async () => {
 const api = token => ({ method = 'GET', path, headers, body }) => {
   const url = `${constants.urls.digitalocean}/${path}`
 
-  return fetch(url, {
-    method: method.toLowerCase(),
+  const config = {
     headers: {
       'Content-Type': 'application/json',
       Authorization: `Bearer ${token}`
-    },
-    body: body ? JSON.stringify(body) : null
+    }
+  }
+
+  if (body) {
+    config.body = JSON.stringify(body)
+  }
+
+  return fetch(url, {
+    ...config,
+    method: method.toLowerCase(),
   })
 
 }

@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/rgrannell1/mn-shutdown#readme",
   "dependencies": {
+    "@rgrannell/errors": "^9.1.0",
     "chalk": "^4.0.0",
     "digitalocean": "^1.2.0",
     "docopt": "^0.6.2",

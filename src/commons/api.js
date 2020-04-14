@@ -8,8 +8,8 @@ api.listImages = async client => {
     path: '/images?type=distribution'
   })
 
-  if (res.status !== 200) {
-    // THROW ERROR
+  if (!res.ok) {
+    throw res
   }
 
   const { images } = await res.json()
@@ -24,18 +24,18 @@ api.listDroplets = async client => {
     path: '/droplets'
   })
 
-  if (res.status !== 200) {
-    // THROW ERROR
+  if (!res.ok) {
+    throw res
   }
 
   const { droplets } = await res.json()
   return droplets
 }
 
-api.dropletExists = async (name, client) => {
+api.getDroplet = async (name, client) => {
   const droplets = await api.listDroplets(client)
 
-  return droplets.some(droplet => {
+  return droplets.find(droplet => {
     return droplet.name === constants.vms.name
   })
 }
@@ -49,19 +49,19 @@ api.snapshot = async (id, snapshotName, client) => {
     }
   })
 
-  if (res.status !== 200) {
-    // THROW ERROR
+  if (!res.ok) {
+    throw res
   }
 
 }
 
-api.listSnapshots = async (client, { resourceType = 'droplet' }) => {
+api.listSnapshots = async (client) => {
   const res = await client({
-    path: `/snapshots?resource_type=${resourceType}`
+    path: `/snapshots?resource_type=droplet`
   })
 
-  if (res.status !== 200) {
-    // THROW ERROR
+  if (!res.ok) {
+    throw res
   }
 
   const { snapshots } = await res.json()
@@ -73,8 +73,8 @@ api.listKeys = async client => {
     path: '/account/keys'
   })
 
-  if (res.status !== 200) {
-    // THROW ERROR
+  if (!res.ok) {
+    throw res
   }
 
   const { ssh_keys } = await res.json()
@@ -88,7 +88,6 @@ api.createDroplet = async (image, key, client) => {
     ssh_keys: [key.id]
   }
 
-  console.log(body)
 
   const res = await client({
     method: 'POST',
@@ -96,13 +95,11 @@ api.createDroplet = async (image, key, client) => {
     body
   })
 
-  if (res.status !== 200) {
-    // THROW ERROR
+  if (!res.ok) {
+    throw res
   }
 
-  const red = await res.json()
-  console.log(red)
-  return red
+  return res
 }
 
 api.updateSnapshot = async () => {
@@ -111,6 +108,25 @@ api.updateSnapshot = async () => {
 
 api.shutdownVM = async () => {
 
+}
+
+api.restoreDroplet = async (droplet, snapshot, client) => {
+  const body = {
+    type: 'restore',
+    image: snapshot.id
+  }
+
+  const res = await client({
+    method: 'POST',
+    path: `/droplets/${droplet.id}/actions`,
+    body
+  })
+
+  if (!res.ok) {
+    throw res
+  }
+
+  return res
 }
 
 module.exports = api
