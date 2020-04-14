@@ -16,4 +16,18 @@ const constants = {
   }
 }
 
+constants.vmConfig = {
+  name: 'minecraft-server',
+  region: 'nyc3',
+  size: 's-1vcpu-1gb',
+  backups: false,
+  ipv6: false,
+  user_data: null,
+  private_networking: null,
+  volumes: null,
+  tags: [
+    'minecraft'
+  ]
+}
+
 module.exports = constants

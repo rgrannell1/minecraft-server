@@ -23,7 +23,7 @@ preprocess.env = async () => {
   return require('dotenv').config().parsed
 }
 
-const api = token => ({ method = 'GET', path, headers }) => {
+const api = token => ({ method = 'GET', path, headers, body }) => {
   const url = `${constants.urls.digitalocean}/${path}`
 
   return fetch(url, {
@@ -31,7 +31,8 @@ const api = token => ({ method = 'GET', path, headers }) => {
     headers: {
       'Content-Type': 'application/json',
       Authorization: `Bearer ${token}`
-    }
+    },
+    body: body ? JSON.stringify(body) : null
   })
 
 }
@@ -45,7 +46,6 @@ const minecraftServer = async args => {
   } else if (args.destroy) {
     await actions.destroyDroplet(client)
   }
-
 }
 
 module.exports = minecraftServer

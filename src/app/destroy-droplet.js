@@ -12,13 +12,10 @@ const destroyDroplet = client => {
 
   // -- shutdown, snapshot, delete
 
-  const res = await client({
-    path: `/droplets/${id}/actions`,
-    body: {
-      type: 'snapshot',
-      name: constants.snapshots.name
-    }
-  })
+  // get droplet and id
+
+  await api.snapshot(id, constants.snapshots.name, client)
+
 
 }
 
