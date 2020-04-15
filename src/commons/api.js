@@ -22,6 +22,13 @@ api.listImages = async client => {
   })
 }
 
+api.getImage = async (slug, client) => {
+  const images = await api.listImages(client)
+
+  return images.find(data => {
+    return data.slug === slug
+  })
+}
 
 api.listDroplets = async client => {
   const res = await client({
@@ -74,7 +81,7 @@ api.listSnapshots = async (client) => {
   return snapshots
 }
 
-api.listKeys = async client => {
+api.listSSHKeys = async client => {
   const res = await client({
     path: '/account/keys'
   })
@@ -85,6 +92,14 @@ api.listKeys = async client => {
 
   const { ssh_keys } = await res.json()
   return ssh_keys
+}
+
+api.getSSHKey = async (name, client) => {
+  const keys = await api.listSSHKeys(client)
+
+  return keys.find(data => {
+    return data.name === name
+  })
 }
 
 api.createDroplet = async (image, key, client) => {

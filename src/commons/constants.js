@@ -17,6 +17,12 @@ const constants = {
   stalls: {
     assignIp: 10000,
     reserveIp: 10000
+  },
+  os: {
+    ubuntu: 'ubuntu-16-04-x64'
+  },
+  sshKeys: {
+    shared: 'shared-minecraft'
   }
 }
 

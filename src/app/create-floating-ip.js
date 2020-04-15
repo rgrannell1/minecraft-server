@@ -16,7 +16,7 @@ const assignFreeIp = async (freeIp, droplet, client) => {
       if (retry <= 0) {
         throw err
       } else {
-        console.log(chalk.yellow('Failed to assign IP address, retrying...'))
+        console.log(chalk.yellow(`Failed to assign IP address, retrying in ${constants.stalls.assignIp}ms...`))
 
         await utils.stall(constants.stalls.assignIp)
       }
@@ -39,7 +39,9 @@ const assignReservedIp = async (droplet, client) => {
       if (retry <= 0) {
         throw err
       } else {
-        console.log(chalk.yellow('Failed to reserve IP address, retrying...'))
+        // detect if "Droplet is already assigned to another floating IP."
+        // check assignment if so
+        console.log(chalk.yellow(`Failed to reserve IP address, retrying in ${constants.stalls.reserveIp}ms...`))
 
         await utils.stall(constants.stalls.reserveIp)
       }
