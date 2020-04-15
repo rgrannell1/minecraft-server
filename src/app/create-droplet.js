@@ -70,10 +70,9 @@ const recreateDroplet = async client => {
     }
   }
 
-  console.log(existingDroplet)
-  console.log('xxxxxxxxxxxxxxxx')
-
-  return newDroplet.json()
+  return {
+    droplet: newDroplet
+  }
 }
 
 module.exports = recreateDroplet

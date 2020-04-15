@@ -50,7 +50,7 @@ const minecraftServer = async args => {
   const client = api(env.TOKEN)
 
   if (args.create) {
-    const {droplet} = await actions.createDroplet(client)
+    const { droplet } = await actions.createDroplet(client)
 
     await actions.createFloatingIp(droplet, client)
   } else if (args.destroy) {

@@ -13,6 +13,10 @@ const constants = {
   },
   snapshots: {
     name: 'minecraft-snapshot'
+  },
+  stalls: {
+    assignIp: 10000,
+    reserveIp: 10000
   }
 }
 
