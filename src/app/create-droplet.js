@@ -45,7 +45,6 @@ const recreateDroplet = async client => {
 
   if (existingDroplet) {
     console.log(chalk.blue('VM already exists'))
-    // check configuration matches.
 
     return {
       droplet: existingDroplet
@@ -59,9 +58,11 @@ const recreateDroplet = async client => {
 
   console.log(chalk.blue('Creating Droplet'))
 
-  await api.createDroplet(image, key, client)
+  // -- todo refactor to return
+  const createDropletRes = await api.createDroplet(image, key, client)
+  const { droplet: newDroplet } = await createDropletRes.json()
 
-  const newDroplet = await api.getDroplet(constants.vms.name, client)
+  //const newDroplet = await api.getDroplet(constants.vms.name, client)
 
   if (snapshot) {
     console.log(chalk.blue('Applying snapshot to Droplet'))
@@ -74,6 +75,9 @@ const recreateDroplet = async client => {
       console.log(chalk.blue('Restoring snapshot'))
     }
   }
+
+  console.log(existingDroplet)
+  console.log('xxxxxxxxxxxxxxxx')
 
   return newDroplet.json()
 }

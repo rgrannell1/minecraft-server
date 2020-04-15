@@ -1,4 +1,5 @@
 
+
 const fs = require('fs').promises
 const constants = require('../commons/constants')
 const clic = require('cloud-init-compile')
@@ -154,12 +155,12 @@ api.assignFloatingIp = async (floatingIp, droplet, client) => {
 }
 
 api.reserveFloatingIp = async (droplet, client) => {
-  const body = {
-    region: 'nyc3'
-  }
+  const body = { }
 
   if (droplet) {
     body.droplet_id = droplet.id
+  } else {
+    body.region = 'nyc'
   }
 
   const res = await client({
@@ -176,6 +177,10 @@ api.reserveFloatingIp = async (droplet, client) => {
 }
 
 api.restoreDroplet = async (droplet, snapshot, client) => {
+  if (!droplet) {
+    throw new Error('droplet not provided.')
+  }
+
   const body = {
     type: 'restore',
     image: snapshot.id

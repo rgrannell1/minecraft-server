@@ -10,11 +10,12 @@ const chalk = require('chalk')
 const createFloatingIp = async (droplet, client) => {
   const ips = await api.listFloatingIps(client)
 
-  const dropletHasIp = ips.some(data => {
+  const assignedIp = ips.find(data => {
     return data.droplet && data.droplet.id === droplet.id
   })
 
-  if (dropletHasIp) {
+  if (assignedIp) {
+    console.log(chalk.blue(`Droplet is assigned floating-ip ${assignedIp.ip}`))
     return
   }
 
@@ -23,8 +24,12 @@ const createFloatingIp = async (droplet, client) => {
   })
 
   if (freeIp) {
+    console.log(chalk.blue(`Assigning free ip ${freeIp.ip} to Droplet`))
+
     api.assignFloatingIp(freeIp, droplet, client)
   } else {
+    console.log(chalk.blue(`Reserving IP address for Droplet`))
+
     const res = await api.reserveFloatingIp(droplet, client)
 
     if (!res.ok) {
