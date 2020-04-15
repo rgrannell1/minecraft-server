@@ -1,6 +1,7 @@
 
 const {docopt} = require('docopt')
 const minecraftServer = require('../app/minecraft-server')
+const chalk = require('chalk')
 
 const docs = `
 Usage:
@@ -10,14 +11,16 @@ Usage:
 
 const args = docopt(docs)
 
-const handleError = err => {
+const handleError = async err => {
   if (err.stack) {
     console.error(err.message)
     console.error(err.stack)
     process.exit(1)
   } else if (err.status) {
-    console.log(err.text())
-    console.log('-----------')
+    const body = await err.json()
+
+    console.error(chalk.red(`${body.id}: ${body.message}`))
+    process.exit(1)
   } else {
     console.error(err)
     process.exit(1)

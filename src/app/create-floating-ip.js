@@ -10,6 +10,14 @@ const chalk = require('chalk')
 const createFloatingIp = async (droplet, client) => {
   const ips = await api.listFloatingIps(client)
 
+  const dropletHasIp = ips.some(data => {
+    return data.droplet && data.droplet.id === droplet.id
+  })
+
+  if (dropletHasIp) {
+    return
+  }
+
   const freeIp = ips.find(data => {
     return data.droplet === null
   })
