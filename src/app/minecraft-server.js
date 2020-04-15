@@ -7,7 +7,8 @@ const chalk = require('chalk')
 const constants = require('../commons/constants')
 
 const actions = {
-  createDroplet: require('./create-droplet')
+  createDroplet: require('./create-droplet'),
+  createFloatingIp: require('./create-floating-ip')
 }
 
 const preprocess = {}
@@ -49,7 +50,9 @@ const minecraftServer = async args => {
   const client = api(env.TOKEN)
 
   if (args.create) {
-    await actions.createDroplet(client)
+    const {droplet} = await actions.createDroplet(client)
+
+    await actions.createFloatingIp(droplet, client)
   } else if (args.destroy) {
     await actions.destroyDroplet(client)
   }

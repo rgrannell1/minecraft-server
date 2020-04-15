@@ -1,5 +1,5 @@
 
-cd ~
+cd /
 
 apt-get update --assume-yes
 

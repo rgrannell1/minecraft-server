@@ -84,11 +84,12 @@ api.listKeys = async client => {
 
 api.createDroplet = async (image, key, client) => {
   const content = await clic.api({
+    workingDirectory: '/',
     gzip: false,
     fpaths: [
       'src/user-data/main.sh'
     ],
-    toRun: 'main.sh'
+    toRun: '/main.sh'
   })
 
   const body = {
@@ -117,6 +118,61 @@ api.updateSnapshot = async () => {
 
 api.shutdownDroplet = async () => {
 
+}
+
+api.listFloatingIps = async client => {
+  const res = await client({
+    path: '/floating_ips'
+  })
+
+  if (!res.ok) {
+    throw res
+  }
+
+  const { floating_ips } = await res.json()
+  return floating_ips
+}
+
+api.assignFloatingIp = async (floatingIp, droplet, client) => {
+  const ip = floatingIp.ip
+  const body = {
+    type: 'assign',
+    droplet_id: droplet.id,
+  }
+
+  const res = await client({
+    method: 'POST',
+    path: `/floating_ips/${ip}/actions`,
+    body
+  })
+
+  if (!res.ok) {
+    throw res
+  }
+
+  return res
+}
+
+api.reserveFloatingIp = async (droplet, client) => {
+  const body = {
+    region: 'nyc3'
+  }
+
+  if (droplet) {
+    body.droplet_id = droplet.id
+  }
+
+  const res = await client({
+    method: 'POST',
+    path: '/floating_ips',
+    body
+  })
+
+  if (!res.ok) {
+    throw res
+  }
+
+  return res
 }
 
 api.restoreDroplet = async (droplet, snapshot, client) => {
