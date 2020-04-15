@@ -26,19 +26,15 @@ const createFloatingIp = async (droplet, client) => {
   if (freeIp) {
     console.log(chalk.blue(`Assigning free ip ${freeIp.ip} to Droplet`))
 
-    api.assignFloatingIp(freeIp, droplet, client)
+    const assignAction = await api.assignFloatingIp(freeIp, droplet, client)
+    console.log(assignAction)
+    console.log('##########')
   } else {
     console.log(chalk.blue(`Reserving IP address for Droplet`))
 
-    const res = await api.reserveFloatingIp(droplet, client)
+    const floatingIp = await api.reserveFloatingIp(droplet, client)
 
-    if (!res.ok) {
-      throw res
-    }
-
-    const { floating_ip } = await res.json()
-
-    console.error(`created floating IP ${floating_ip.ip}.`)
+    console.error(`created floating IP ${floatingIp.ip}.`)
   }
 }
 

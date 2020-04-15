@@ -3,7 +3,7 @@ const api = require('../commons/api')
 const constants = require('../commons/constants')
 const chalk = require('chalk')
 
-const getImage = async(slug, client) => {
+const getImage = async (slug, client) => {
   const images = await api.listImages(client)
 
   return images.find(data => {
@@ -58,18 +58,12 @@ const recreateDroplet = async client => {
 
   console.log(chalk.blue('Creating Droplet'))
 
-  // -- todo refactor to return
-  const createDropletRes = await api.createDroplet(image, key, client)
-  const { droplet: newDroplet } = await createDropletRes.json()
-
-  //const newDroplet = await api.getDroplet(constants.vms.name, client)
+  const newDroplet = await api.createDroplet(image, key, client)
 
   if (snapshot) {
     console.log(chalk.blue('Applying snapshot to Droplet'))
 
-    const snapshotStatus = await api.restoreDroplet(newDroplet, snapshot, client)
-
-    const { action } = await snapshotStatus.json()
+    const action = await api.restoreDroplet(newDroplet, snapshot, client)
 
     if (action && action.status === 'in-progress') {
       console.log(chalk.blue('Restoring snapshot'))

@@ -16,6 +16,7 @@ api.listImages = async client => {
   }
 
   const { images } = await res.json()
+
   return images.filter(data => {
     return data.distribution === 'Ubuntu'
   })
@@ -55,6 +56,9 @@ api.snapshot = async (id, snapshotName, client) => {
   if (!res.ok) {
     throw res
   }
+
+  const { action } = await res.json()
+  return action
 }
 
 api.listSnapshots = async (client) => {
@@ -110,16 +114,13 @@ api.createDroplet = async (image, key, client) => {
     throw res
   }
 
-  return res
+  const { droplet } = await res.json()
+  return droplet
 }
 
-api.updateSnapshot = async () => {
+api.updateSnapshot = async () => { }
 
-}
-
-api.shutdownDroplet = async () => {
-
-}
+api.shutdownDroplet = async () => { }
 
 api.listFloatingIps = async client => {
   const res = await client({
@@ -151,7 +152,8 @@ api.assignFloatingIp = async (floatingIp, droplet, client) => {
     throw res
   }
 
-  return res
+  const { action } = await res.json()
+  return action
 }
 
 api.reserveFloatingIp = async (droplet, client) => {
@@ -173,7 +175,8 @@ api.reserveFloatingIp = async (droplet, client) => {
     throw res
   }
 
-  return res
+  const { floating_ip } = await res.json()
+  return floating_ip
 }
 
 api.restoreDroplet = async (droplet, snapshot, client) => {
@@ -196,7 +199,8 @@ api.restoreDroplet = async (droplet, snapshot, client) => {
     throw res
   }
 
-  return res
+  const { action } = await res.json()
+  return action
 }
 
 module.exports = api
