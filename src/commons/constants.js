@@ -1,6 +1,9 @@
 
 const path = require('path')
 
+/**
+ * The program-wide constant object
+ */
 const constants = {
   paths: {
     env: path.resolve(path.join(__dirname, '../../.env'))

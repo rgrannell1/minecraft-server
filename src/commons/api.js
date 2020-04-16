@@ -6,7 +6,14 @@ const clic = require('cloud-init-compile')
 
 const api = {}
 
-api.listImages = async client => {
+/**
+ * List OS images available on DigitalOcean
+ *
+ * @param {Object} client the digitalocean client
+ *
+ * @returns {Array<object>} A list of ubuntu images
+ */
+api.listUbuntuImages = async client => {
   const res = await client({
     path: '/images?type=distribution'
   })
@@ -22,8 +29,15 @@ api.listImages = async client => {
   })
 }
 
+/**
+ * List OS images available on DigitalOcean
+ *
+ * @param {Object} client the digitalocean client
+ *
+ * @returns {Array<object>} A list of ubuntu images
+ */
 api.getImage = async (slug, client) => {
-  const images = await api.listImages(client)
+  const images = await api.listUbuntuImages(client)
 
   return images.find(data => {
     return data.slug === slug

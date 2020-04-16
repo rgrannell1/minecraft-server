@@ -11,6 +11,12 @@ Usage:
 
 const args = docopt(docs)
 
+/**
+ * Handle CLI errors
+ *
+ * @param {Response | Error} err a thrown object
+ *
+ */
 const handleError = async err => {
   if (err.stack) {
     console.error(err.message)

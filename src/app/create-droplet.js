@@ -3,7 +3,14 @@ const api = require('../commons/api')
 const constants = require('../commons/constants')
 const chalk = require('chalk')
 
-const getSnapshot = async (client) => {
+/**
+ * Get the most recent snapshot for the droplet
+ *
+ * @param {*} client the API client
+ *
+ * @returns {Object} the snapshot data
+ */
+const getRecentSnapshot = async (client) => {
   const snapshots = await api.listSnapshots(client)
 
   const sorted = snapshots
@@ -21,8 +28,9 @@ const getSnapshot = async (client) => {
  * Attempts to restore a snapshot, but will provision a server
  * from scratch if this snapshot does not exist.
  *
+ * @param {object} client
  *
- * @param {*} client
+ * @returns {object} a droplet
  */
 const recreateDroplet = async client => {
   const existingDroplet = await api.getDroplet(constants.vms.name, client)
@@ -53,7 +61,7 @@ const recreateDroplet = async client => {
 
   const newDroplet = await api.createDroplet(image, key, client)
 
-  const snapshot = await getSnapshot(client)
+  const snapshot = await getRecentSnapshot(client)
 
   if (snapshot) {
     console.log(chalk.blue('Applying snapshot to Droplet'))

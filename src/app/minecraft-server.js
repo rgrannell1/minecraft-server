@@ -13,6 +13,11 @@ const actions = {
 
 const preprocess = {}
 
+/**
+ * Check that the environment is correctly configured
+ *
+ * @returns {object} environment configuration.
+ */
 preprocess.env = async () => {
   try {
     await fs.access(constants.paths.env)
@@ -24,6 +29,13 @@ preprocess.env = async () => {
   return require('dotenv').config().parsed
 }
 
+/**
+ * Create a shallow wrapper around fetch to make requests to digitalocean
+ *
+ * @param {string} token the digitalocean token
+ *
+ * @returns {function} a fetch API wrapper
+ */
 const api = token => ({ method = 'GET', path, headers, body }) => {
   const url = `${constants.urls.digitalocean}/${path}`
 
@@ -45,6 +57,11 @@ const api = token => ({ method = 'GET', path, headers, body }) => {
 
 }
 
+/**
+ * Create or Deprovision a Minecraft Server
+ *
+ * @param {object} args CLI arguments
+ */
 const minecraftServer = async args => {
   const env = await preprocess.env()
   const client = api(env.TOKEN)

@@ -1,7 +1,7 @@
 
 const chalk = require('chalk')
 
-const destroyDroplet = client => {
+const destroyDroplet = async client => {
 
   const exists = await api.dropletExists(constants.vms.name, client)
 
