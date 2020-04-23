@@ -37,7 +37,9 @@ preprocess.env = async () => {
  * @returns {function} a fetch API wrapper
  */
 const api = token => ({ method = 'GET', path, headers, body }) => {
-  const url = `${constants.urls.digitalocean}/${path}`
+  const url = path.startsWith('/')
+    ? `${constants.urls.digitalocean}${path}`
+    : `${constants.urls.digitalocean}/${path}`
 
   const config = {
     headers: {
@@ -52,9 +54,8 @@ const api = token => ({ method = 'GET', path, headers, body }) => {
 
   return fetch(url, {
     ...config,
-    method: method.toLowerCase(),
+    method,
   })
-
 }
 
 /**

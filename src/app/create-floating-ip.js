@@ -5,7 +5,7 @@ const chalk = require('chalk')
 const utils = require('../commons/utils')
 
 /**
- * Assign a currently free IP address ti a drioket
+ * Assign a currently free IP address to a droplet
  *
  * @param {object} freeIp a free IP address
  * @param {object} droplet a droplet
@@ -14,8 +14,22 @@ const utils = require('../commons/utils')
 const assignFreeIp = async (freeIp, droplet, client) => {
   console.log(chalk.blue(`Assigning free ip ${freeIp.ip} to Droplet`))
 
-  let retry = 5
+  let retry = 50
   while (retry >= 0) {
+    try {
+      const dropletIp = await api.getDropletFloatingIp(droplet.id, client)
+      if (dropletIp) {
+        console.log(chalk.blue(`Droplet has IP address ${dropletIp.ip}`))
+        return
+      }
+    } catch (err) {
+      if (retry <= 0) {
+        throw err
+      } else {
+        console.log(chalk.yellow(`Failed to list IP addresses`))
+      }
+    }
+
     try {
       const assignAction = await api.assignFloatingIp(freeIp, droplet, client)
     } catch (err) {
@@ -41,6 +55,9 @@ const assignFreeIp = async (freeIp, droplet, client) => {
  * @throws {Exception}
  */
 const handleReservedIpError = async (err, retry) => {
+  if (err.message.includes('assigned')) {
+    return
+  }
   if (retry <= 0) {
     throw err
   } else {
@@ -61,12 +78,25 @@ const handleReservedIpError = async (err, retry) => {
 const assignReservedIp = async (droplet, client) => {
   console.log(chalk.blue(`Reserving IP address for Droplet`))
 
-  let retry = 5
+  let retry = 50
   while (retry >= 0) {
+    try {
+      const dropletIp = await api.getDropletFloatingIp(droplet.id, client)
+      if (dropletIp) {
+        console.log(chalk.blue(`Droplet has IP address ${dropletIp.ip}`))
+        return
+      }
+    } catch (err) {
+      if (retry <= 0) {
+        throw err
+      } else {
+        console.log(chalk.yellow(`Failed to list IP addresses`))
+      }
+    }
+
     try {
       const floatingIp = await api.reserveFloatingIp(droplet, client)
       console.log(`created floating IP ${floatingIp.ip}.`)
-
     } catch (err) {
       await handleReservedIpError(err, retry)
     }

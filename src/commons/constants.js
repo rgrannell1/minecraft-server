@@ -18,8 +18,8 @@ const constants = {
     name: 'minecraft-snapshot'
   },
   stalls: {
-    assignIp: 10000,
-    reserveIp: 10000
+    assignIp: 5000,
+    reserveIp: 5000
   },
   os: {
     ubuntu: 'ubuntu-16-04-x64'

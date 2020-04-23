@@ -143,7 +143,13 @@ api.createDroplet = async (image, key, client) => {
     throw res
   }
 
-  const { droplet } = await res.json()
+  const resBody = await res.json()
+  const { droplet } = resBody
+
+  if (!droplet) {
+    throw new Error('response did not return "droplet" property.')
+  }
+
   return droplet
 }
 
@@ -162,6 +168,14 @@ api.listFloatingIps = async client => {
 
   const { floating_ips } = await res.json()
   return floating_ips
+}
+
+api.getDropletFloatingIp = async (dropletId, client) => {
+  const ips = await api.listFloatingIps(client)
+
+  return ips.find(data => {
+    return data.droplet && data.droplet.id === dropletId
+  })
 }
 
 api.assignFloatingIp = async (floatingIp, droplet, client) => {
@@ -210,7 +224,7 @@ api.reserveFloatingIp = async (droplet, client) => {
 
 api.restoreDroplet = async (droplet, snapshot, client) => {
   if (!droplet) {
-    throw new Error('droplet not provided.')
+    throw new Error('no droplet supplied.')
   }
 
   const body = {
@@ -230,6 +244,11 @@ api.restoreDroplet = async (droplet, snapshot, client) => {
 
   const { action } = await res.json()
   return action
+}
+
+api.dropletIp = async (name, client) => {
+  const droplet = await api.getDroplet(name, client)
+  console.log(droplet.networks)
 }
 
 module.exports = api
