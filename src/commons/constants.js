@@ -21,6 +21,9 @@ const constants = {
     assignIp: 5000,
     reserveIp: 5000
   },
+  retries: {
+    assignIp: 25,
+  },
   os: {
     ubuntu: 'ubuntu-16-04-x64'
   },

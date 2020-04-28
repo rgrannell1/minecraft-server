@@ -14,7 +14,7 @@ const utils = require('../commons/utils')
 const assignFreeIp = async (freeIp, droplet, client) => {
   console.log(chalk.blue(`Assigning free ip ${freeIp.ip} to Droplet`))
 
-  let retry = 50
+  let retry = constants.retries.assignIp
   while (retry >= 0) {
     try {
       const dropletIp = await api.getDropletFloatingIp(droplet.id, client)
@@ -78,7 +78,7 @@ const handleReservedIpError = async (err, retry) => {
 const assignReservedIp = async (droplet, client) => {
   console.log(chalk.blue(`Reserving IP address for Droplet`))
 
-  let retry = 50
+  let retry = constants.retries.assignIp
   while (retry >= 0) {
     try {
       const dropletIp = await api.getDropletFloatingIp(droplet.id, client)
