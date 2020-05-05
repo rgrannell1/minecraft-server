@@ -77,14 +77,18 @@ const minecraftServer = async args => {
     // todo remove.
     console.log('deleting')
 
-    const res = await client({
-      method: 'DELETE',
+    /**
+
+
+     const res = await client({
+       method: 'DELETE',
       path: `/droplets/${droplet.id}`
     })
 
     if (!res.ok) {
       throw res
     }
+*/
 
     console.log('done')
 

@@ -33,7 +33,7 @@ const assignFreeIp = async (freeIp, droplet, client) => {
     try {
       const assignAction = await api.assignFloatingIp(freeIp, droplet, client)
 
-      return assertReturn(assignAction)
+      return freeIp.ip
     } catch (err) {
       if (retry <= 0) {
         throw err

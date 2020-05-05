@@ -19,10 +19,12 @@ const constants = {
   },
   stalls: {
     assignIp: 5000,
-    reserveIp: 5000
+    reserveIp: 5000,
+    ssh: 5000
   },
   retries: {
     assignIp: 25,
+    ssh: 5
   },
   os: {
     ubuntu: 'ubuntu-16-04-x64'

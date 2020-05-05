@@ -63,7 +63,7 @@ const recreateDroplet = async client => {
 
   const snapshot = await getRecentSnapshot(client)
 
-  if (snapshot) {
+  if (snapshot && false) {
     log.success('Applying snapshot to Droplet')
 
     const action = await api.restoreDroplet(newDroplet, snapshot, client)
@@ -73,8 +73,6 @@ const recreateDroplet = async client => {
     } else {
       log.warning(action.status)
     }
-
-    log.success('Checking Server Status...')
 
   } else {
     log.success('Validating Installation...')
