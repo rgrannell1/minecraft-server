@@ -1,31 +1,35 @@
 #!/bin/sh
 
-MINECRAFT_JAR_URL=`python3 /usr/src/user-data/get-server-url.py`
+MINECRAFT_JAR_URL=$(python3 /usr/src/user-data/get-server-url.py)
 
-apt-get update --assume-yes
-apt-get install wget screen openjdk-8-jdk --assume-yes
+apt-get update --assume-yes && apt-get upgrade --assume-yes && apt-get install wget screen openjdk-8-jdk --assume-yes
 
-echo "dependencies installed."
+printf "\ndependencies installed.\n"
 
-if [ $(getent passwd minecraftuser) = "" ]
+PWD=$(getent passwd minecraftuser)
+
+if [ "$PWD" = "" ]
 then
   useradd --system --create-home --home /home/minecraftuser minecraftuser
   usermod --append --groups sudo minecraftuser
 else
-  echo "minecraftuser exists"
+  printf "\nminecraftuser exists\n"
 fi
 
-echo "user minecraftuser created."
+printf "\nuser minecraftuser created.\n"
 
-cd /home/minecraftuser
+mv /usr/src/user-data/start_minecraft.sh /home/minecraftuser/start_minecraft.sh
+cat /usr/src/user-data/motd > /etc/motd
+
+cd /home/minecraftuser || exit 1
 wget -O minecraft_server.jar "$MINECRAFT_JAR_URL"
 
 chmod +x minecraft_server.jar
 
-echo "downloaded server jar from $MINECRAFT_JAR_URL"
+printf "\ndownloaded server jar from $MINECRAFT_JAR_URL\n"
 
 cp /usr/src/user-data/minecraft-server.service /etc/systemd/system/minecraft.service
 systemctl enable minecraft
 systemctl start minecraft
 
-echo "completed setup"
+printf "\ncompleted setup\n"
