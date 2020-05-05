@@ -1,7 +1,7 @@
 
 const api = require('../commons/api')
 const constants = require('../commons/constants')
-const chalk = require('chalk')
+const log = require('../commons/log')
 const utils = require('../commons/utils')
 
 /**
@@ -12,31 +12,33 @@ const utils = require('../commons/utils')
  * @param {object} client the API client
  */
 const assignFreeIp = async (freeIp, droplet, client) => {
-  console.log(chalk.blue(`Assigning free ip ${freeIp.ip} to Droplet`))
+  log.success(`Assigning free ip ${freeIp.ip} to Droplet`)
 
   let retry = constants.retries.assignIp
   while (retry >= 0) {
     try {
       const dropletIp = await api.getDropletFloatingIp(droplet.id, client)
       if (dropletIp) {
-        console.log(chalk.blue(`Droplet has IP address ${dropletIp.ip}`))
-        return
+        log.success(`Droplet has IP address ${dropletIp.ip}`)
+        return assertReturn(dropletIp)
       }
     } catch (err) {
       if (retry <= 0) {
         throw err
       } else {
-        console.log(chalk.yellow(`Failed to list IP addresses`))
+        log.warning(`Failed to list IP addresses`)
       }
     }
 
     try {
       const assignAction = await api.assignFloatingIp(freeIp, droplet, client)
+
+      return assertReturn(assignAction)
     } catch (err) {
       if (retry <= 0) {
         throw err
       } else {
-        console.log(chalk.yellow(`Failed to assign IP address, retrying in ${constants.stalls.assignIp}ms...`))
+        log.warning(`Failed to assign IP address, retrying in ${constants.stalls.assignIp}ms...`)
 
         await utils.stall(constants.stalls.assignIp)
       }
@@ -61,7 +63,7 @@ const handleReservedIpError = async (err, retry) => {
   if (retry <= 0) {
     throw err
   } else {
-    console.log(chalk.yellow(`Failed to reserve IP address, retrying in ${constants.stalls.reserveIp}ms...`))
+    log.warning(`Failed to reserve IP address, retrying in ${constants.stalls.reserveIp}ms...`)
     await utils.stall(constants.stalls.reserveIp)
   }
 }
@@ -76,27 +78,29 @@ const handleReservedIpError = async (err, retry) => {
  * @returns {undefined}
  */
 const assignReservedIp = async (droplet, client) => {
-  console.log(chalk.blue(`Reserving IP address for Droplet`))
+  log.success(`Reserving IP address for Droplet`)
 
   let retry = constants.retries.assignIp
   while (retry >= 0) {
     try {
       const dropletIp = await api.getDropletFloatingIp(droplet.id, client)
       if (dropletIp) {
-        console.log(chalk.blue(`Droplet has IP address ${dropletIp.ip}`))
-        return
+        log.success(`Droplet has IP address ${dropletIp.ip}`)
+        return assertReturn(dropletIp.ip)
       }
     } catch (err) {
       if (retry <= 0) {
         throw err
       } else {
-        console.log(chalk.yellow(`Failed to list IP addresses`))
+        log.warning(`Failed to list IP addresses`)
       }
     }
 
     try {
       const floatingIp = await api.reserveFloatingIp(droplet, client)
       console.log(`created floating IP ${floatingIp.ip}.`)
+
+      return assertReturn(floatingIp.ip)
     } catch (err) {
       await handleReservedIpError(err, retry)
     }
@@ -113,6 +117,14 @@ const assignReservedIp = async (droplet, client) => {
  *
  * @returns {undefined}
  */
+
+const assertReturn = val => {
+  if (!val) {
+    throw new Error('no value provided.')
+  }
+  return val
+}
+
 const createFloatingIp = async (droplet, client) => {
   const ips = await api.listFloatingIps(client)
 
@@ -120,9 +132,10 @@ const createFloatingIp = async (droplet, client) => {
     return data.droplet && data.droplet.id === droplet.id
   })
 
-  if (assignedIp) {
-    console.log(chalk.blue(`Droplet is assigned floating-ip ${assignedIp.ip}`))
-    return
+  const ip = assignedIp?.ip
+  if (ip) {
+    log.success(`Droplet is assigned floating-ip ${ip}`)
+    return assertReturn(ip)
   }
 
   const freeIp = ips.find(data => {
@@ -130,9 +143,9 @@ const createFloatingIp = async (droplet, client) => {
   })
 
   if (freeIp) {
-    await assignFreeIp(freeIp, droplet, client)
+    return assignFreeIp(freeIp, droplet, client)
   } else {
-    await assignReservedIp(droplet, client)
+    return assignReservedIp(droplet, client)
   }
 }
 

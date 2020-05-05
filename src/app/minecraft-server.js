@@ -2,13 +2,14 @@
 const fs = require('fs').promises
 const path = require('path')
 const fetch = require('node-fetch')
-const chalk = require('chalk')
 
+const log = require('../commons/log')
 const constants = require('../commons/constants')
 
 const actions = {
   createDroplet: require('./create-droplet'),
-  createFloatingIp: require('./create-floating-ip')
+  createFloatingIp: require('./create-floating-ip'),
+  validateInstall: require('./validate-install')
 }
 
 const preprocess = {}
@@ -22,7 +23,7 @@ preprocess.env = async () => {
   try {
     await fs.access(constants.paths.env)
   } catch (err) {
-    console.error(chalk.red(`${constants.paths.env} file does not exist`))
+    log.error(`${constants.paths.env} file does not exist`)
     process.exit(1)
   }
 
@@ -70,7 +71,23 @@ const minecraftServer = async args => {
   if (args.create) {
     const { droplet } = await actions.createDroplet(client)
 
-    await actions.createFloatingIp(droplet, client)
+    const address = await actions.createFloatingIp(droplet, client)
+    await actions.validateInstall(address, env.SSH_PASSWORD, client)
+
+    // todo remove.
+    console.log('deleting')
+
+    const res = await client({
+      method: 'DELETE',
+      path: `/droplets/${droplet.id}`
+    })
+
+    if (!res.ok) {
+      throw res
+    }
+
+    console.log('done')
+
   } else if (args.destroy) {
     await actions.destroyDroplet(client)
   }

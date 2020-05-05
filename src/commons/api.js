@@ -121,9 +121,7 @@ api.createDroplet = async (image, key, client) => {
     workingDirectory: '/usr/',
     gzip: false,
     fpaths: [
-      'src/user-data/main.sh',
-      'src/user-data/get-server-url.py',
-      'src/user-data/minecraft-server.service'
+      'src/user-data'
     ],
     toRun: '/main.sh'
   })
@@ -251,6 +249,17 @@ api.restoreDroplet = async (droplet, snapshot, client) => {
 api.dropletIp = async (name, client) => {
   const droplet = await api.getDroplet(name, client)
   console.log(droplet.networks)
+}
+
+api.deleteDroplet = async (droplet, client) => {
+  const res = await client({
+    method: 'DELETE',
+    path: `/droplets/${droplet.id}`
+  })
+
+  if (!res.ok) {
+    throw res
+  }
 }
 
 module.exports = api

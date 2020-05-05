@@ -1,7 +1,7 @@
 
 const api = require('../commons/api')
+const log = require('../commons/log')
 const constants = require('../commons/constants')
-const chalk = require('chalk')
 
 /**
  * Get the most recent snapshot for the droplet
@@ -36,14 +36,14 @@ const recreateDroplet = async client => {
   const existingDroplet = await api.getDroplet(constants.vms.name, client)
 
   if (existingDroplet) {
-    console.log(chalk.blue('VM already exists'))
+    log.success('VM already exists')
 
     return {
       droplet: existingDroplet
     }
   }
 
-  console.log(chalk.yellow('VM does not exist'))
+  log.warning('VM does not exist')
 
   const image = await api.getImage(constants.os.ubuntu, client)
 
@@ -57,22 +57,27 @@ const recreateDroplet = async client => {
     throw new Error('failed to get SSH key.')
   }
 
-  console.log(chalk.blue('Creating Droplet'))
+  log.success('Creating Droplet')
 
   const newDroplet = await api.createDroplet(image, key, client)
 
   const snapshot = await getRecentSnapshot(client)
 
   if (snapshot) {
-    console.log(chalk.blue('Applying snapshot to Droplet'))
+    log.success('Applying snapshot to Droplet')
 
     const action = await api.restoreDroplet(newDroplet, snapshot, client)
 
     if (action && action.status === 'in-progress') {
-      console.log(chalk.blue('Restoring snapshot...'))
+      log.success('Restoring snapshot...')
     } else {
-      console.log(chalk.yellow(action.status))
+      log.warning(action.status)
     }
+
+    log.success('Checking Server Status...')
+
+  } else {
+    log.success('Validating Installation...')
   }
 
   return {

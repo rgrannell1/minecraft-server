@@ -1,7 +1,7 @@
 
 const {docopt} = require('docopt')
 const minecraftServer = require('../app/minecraft-server')
-const chalk = require('chalk')
+const log = require('../commons/log')
 
 const docs = `
 Usage:
@@ -25,7 +25,7 @@ const handleError = async err => {
   } else if (err.status) {
     const body = await err.json()
 
-    console.error(chalk.red(`${body.id}: ${body.message}`))
+    log.error(`${body.id}: ${body.message}`)
     process.exit(1)
   } else {
     console.error(err)

@@ -25,7 +25,8 @@
     "docopt": "^0.6.2",
     "dotenv": "^8.2.0",
     "neodoc": "^2.0.2",
-    "node-fetch": "^2.6.0"
+    "node-fetch": "^2.6.0",
+    "node-ssh": "^9.0.0"
   },
   "devDependencies": {
     "documentation": "^12.3.0"
