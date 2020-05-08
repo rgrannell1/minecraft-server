@@ -1,0 +1,43 @@
+---
+- hosts: all
+  become: yes
+  become_user: root
+  tasks:
+    - name: Install packages
+      apt:
+        update_cache: yes
+        name:
+          - wget
+          - screen
+          - openjdk-8-jdk
+          - build-essential
+        state: latest
+    - name: Create a dedicated user for the server
+      user:
+        name: minecraftuser
+        groups:
+          - sudo
+        system: true
+        state: present
+    - name: Copy motd
+      copy:
+        src: motd
+        dest: /usr/motd
+        owner: root
+        group: root
+    - name: Download the server URL
+      get_url:
+        url: "{{ ms_server_url }}"
+        dest: /home/minecraftuser/minecraft_server.jar
+        mode: 550
+    - name: Agree to the EULA
+      shell: echo 'eula=true' >> /home/minecraftuser/eula.txt
+    - name: Close mcrcon to send commands to Minecraft
+      copy:
+        src: minecraft.service
+        dest: /etc/systemd/system/minecraft.service
+    - name: Enable minecraft server
+      service:
+        name: minecraft
+        state: started
+        enabled: yes
