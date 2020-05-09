@@ -1,0 +1,20 @@
+---
+- hosts: all
+  become: yes
+  become_user: root
+  tasks:
+    - name: Copy server-utils to the server
+      copy:
+        src: server-utils
+        dest: /home/minecraftuser
+
+    - name: Install server-utils modules
+      npm:
+        path: /home/minecraftuser/server-utils
+
+    - name: Check the server status
+      shell: node /home/minecraftuser/server-utils/pulpfile.js status
+      register: result
+      retries: 9
+      delay: 10
+      until: result.rc == 0
