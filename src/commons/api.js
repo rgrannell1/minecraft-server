@@ -117,20 +117,10 @@ api.getSSHKey = async (name, client) => {
 }
 
 api.createDroplet = async (image, key, client) => {
-  const content = await clic.api({
-    workingDirectory: '/usr',
-    gzip: false,
-    fpaths: [
-      'src/user-data'
-    ],
-    toRun: 'src/user-data/main.sh'
-  })
-
   const body = {
     ...constants.vmConfig,
     image: image.id,
-    ssh_keys: [key.id],
-    user_data: content
+    ssh_keys: [key.id]
   }
 
   const res = await client({

@@ -3,18 +3,13 @@ Description=Minecraft Server
 After=network.target
 
 [Service]
-WorkingDirectory=/home/minecraftuser/minecraftdir
-
+WorkingDirectory=/home/minecraftuser/
 User=minecraftuser
-Group=minecraftuser
+
 Restart=always
 SuccessExitStatus=0 1
-ProtectHome=true
-ProtectSystem=full
-PrivateDevices=true
-NoNewPrivileges=true
 
-ExecStart=sh /home/minecraftuser/minecraftdir/start_minecraft.sh
+ExecStart=/bin/bash start-minecraft.sh
 
 [Install]
 WantedBy=multi-user.target

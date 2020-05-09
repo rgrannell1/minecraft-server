@@ -3,6 +3,12 @@
   become: yes
   become_user: root
   tasks:
+    - name: Install nodesjs
+      snap:
+        name: node
+        classic: yes
+        channel: latest/edge
+
     - name: Install packages
       apt:
         update_cache: yes
@@ -12,6 +18,7 @@
           - openjdk-8-jdk
           - build-essential
         state: latest
+
     - name: Create a dedicated user for the server
       user:
         name: minecraftuser
@@ -19,25 +26,57 @@
           - sudo
         system: true
         state: present
+
     - name: Copy motd
       copy:
         src: motd
         dest: /usr/motd
         owner: root
         group: root
+
     - name: Download the server URL
       get_url:
         url: "{{ ms_server_url }}"
         dest: /home/minecraftuser/minecraft_server.jar
         mode: 550
+
     - name: Agree to the EULA
-      shell: echo 'eula=true' >> /home/minecraftuser/eula.txt
-    - name: Close mcrcon to send commands to Minecraft
+      shell: echo 'eula=true' > /home/minecraftuser/eula.txt
+
+    - name: Copy the minecraft service to the server
       copy:
         src: minecraft.service
         dest: /etc/systemd/system/minecraft.service
+
     - name: Enable minecraft server
       service:
         name: minecraft
         state: started
         enabled: yes
+        daemon_reload: yes
+
+    - name: Copy server-utils to the server
+      copy:
+        src: server-utils
+        dest: /home/minecraftuser
+
+    - name: Copy start script to the server
+      copy:
+        src: start-minecraft.sh
+        dest: /home/minecraftuser/start-minecraft.sh
+
+    - name: Copy server-properties to the server
+      copy:
+        src: server.properties
+        dest: /home/minecraftuser/server.properties
+
+    - name: Install server-utils modules
+      npm:
+        path: /home/minecraftuser/server-utils
+
+    - name: Check the server status
+      shell: node /home/minecraftuser/server-utils/pulpfile.js status
+      register: result
+      retries: 9
+      delay: 10
+      until: result.rc == 0

@@ -9,6 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@rgrannell/pulp": "^9.1.0",
     "dayjs": "^1.8.23",
     "minecraft-query": "^1.0.9",
     "ps-list": "^7.0.0"
