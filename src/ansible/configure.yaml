@@ -55,6 +55,18 @@
         enabled: yes
         daemon_reload: yes
 
+    - name: Copy the deprovision service to the server
+      copy:
+        src: deprovision.service
+        dest: /etc/systemd/system/deprovision.service
+
+    - name: Enable deprovision server
+      service:
+        name: deprovision
+        state: started
+        enabled: yes
+        daemon_reload: yes
+
     - name: Copy server-utils to the server
       copy:
         src: server-utils

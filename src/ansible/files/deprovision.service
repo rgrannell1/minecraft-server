@@ -1,15 +1,15 @@
 
 [Unit]
-Description=Minecraft Server
+Description=Deprovision the minecraft server when inactive
 
 [Service]
 WorkingDirectory=/home/minecraftuser
-#User=minecraftuser
+User=minecraftuser
 
 KillMode=process
 KillSignal=SIGINT
 
-ExecStart=/bin/bash ./start-minecraft.sh
+ExecStart=/bin/bash ./deprovision.sh
 
 [Install]
 WantedBy=multi-user.target

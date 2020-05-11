@@ -29,7 +29,6 @@ def get_server_url ():
   raise Exception("did not find URL.")
 
 def main ():
-   # "server_url": get_server_url()
   obj = {
     "_meta": {
       "hostvars": {

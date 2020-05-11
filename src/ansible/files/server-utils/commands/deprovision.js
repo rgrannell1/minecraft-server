@@ -2,6 +2,7 @@
 const MinecraftQuery = require('minecraft-query')
 const psList = require('ps-list')
 const dayjs = require('dayjs')
+const fetch = require('node-fetch')
 
 const constants = require('../shared/constants')
 
@@ -81,7 +82,7 @@ const handleInactiveState = state => {
   console.log(`${timestamp()}: server inactive; shutting down in ${Math.ceil(remainingSeconds / 60)} minutes`)
 
   if (diffMs > constants.timers.shutdownMs) {
-    console.log(`${timestamp()}: server inactive; shutting down NOW`)
+    console.log(`${timestamp()}: server inactive; triggering deprovisioning`)
 
     exec('poweroff', (err, stdout, stderr) => {
       if (err) {
@@ -100,15 +101,11 @@ command.task = async () => {
 
   console.log('polling local server for user-counts')
 
-  // -- todo check if server is online
   const tasks = await psList()
-  //console.log(tasks.map(d => d.name))
 
   let serverData = await fetchServerData()
 
   if (!serverData) {
-    // -- could not retrieve query data
-
     console.log(`${timestamp()}: failed to connect to server`)
     handleInactiveState(state)
 
