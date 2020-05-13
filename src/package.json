@@ -8,6 +8,7 @@
   "license": "ISC",
   "dependencies": {
     "@rgrannell/errors": "^9.1.0",
-    "basic-auth": "^2.0.1"
+    "basic-auth": "^2.0.1",
+    "dotenv": "^8.2.0"
   }
 }

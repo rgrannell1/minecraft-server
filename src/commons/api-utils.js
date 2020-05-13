@@ -43,7 +43,7 @@ utils.authenticate = (req, res) => {
     throw errors.unauthorized('no credentials provided', 401)
   }
 
-  const isValidUser = parsed.user === process.env.BASIC_AUTH_USER
+  const isValidUser = parsed.name === process.env.BASIC_AUTH_USER
   const isValidPass = parsed.pass === process.env.BASIC_AUTH_PASS
 
   if (!isValidUser) {

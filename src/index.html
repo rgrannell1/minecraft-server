@@ -1,0 +1,49 @@
+<html>
+  <head>
+    <style>
+      h1 {
+        text-align: center;
+      }
+
+      .code {
+        background: black;
+        color: white;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Minecraft</h1>
+
+    <div class="code">
+      <pre>
+        <code>
+          Command Status.
+        </code>
+      </pre>
+    </div>
+
+    <button id="start">Start</button>
+    <button id="stop">Stop</button>
+  </body>
+  <script>
+
+  const start = document.getElementById('start')
+
+  const onEvent = {}
+
+  onEvent.start = () => {
+
+  }
+
+  onEvent.stop = () => {
+
+  }
+
+  start.addEventListener('click', onEvent.start)
+
+  const stop = document.getElementById('stop')
+
+  stop.addEventListener('click', onEvent.stop)
+
+  </script>
+</html>

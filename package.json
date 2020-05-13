@@ -29,6 +29,7 @@
     "node-ssh": "^9.0.0"
   },
   "devDependencies": {
-    "documentation": "^12.3.0"
+    "documentation": "^12.3.0",
+    "standard": "^14.3.4"
   }
 }

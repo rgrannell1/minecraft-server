@@ -5,6 +5,7 @@ const fetch = require('node-fetch')
 
 const log = require('../commons/log')
 const constants = require('../commons/constants')
+const api = require('../commons/api')
 
 const actions = {
   createDroplet: require('./create-droplet'),
@@ -31,42 +32,13 @@ preprocess.env = async () => {
 }
 
 /**
- * Create a shallow wrapper around fetch to make requests to digitalocean
- *
- * @param {string} token the digitalocean token
- *
- * @returns {function} a fetch API wrapper
- */
-const api = token => ({ method = 'GET', path, headers, body }) => {
-  const url = path.startsWith('/')
-    ? `${constants.urls.digitalocean}${path}`
-    : `${constants.urls.digitalocean}/${path}`
-
-  const config = {
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}`
-    }
-  }
-
-  if (body) {
-    config.body = JSON.stringify(body)
-  }
-
-  return fetch(url, {
-    ...config,
-    method,
-  })
-}
-
-/**
  * Create or Deprovision a Minecraft Server
  *
  * @param {object} args CLI arguments
  */
 const minecraftServer = async args => {
   const env = await preprocess.env()
-  const client = api(env.TOKEN)
+  const client = api.client(env.TOKEN)
 
   if (args.create) {
     const { droplet } = await actions.createDroplet(client)

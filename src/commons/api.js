@@ -249,4 +249,34 @@ api.deleteDroplet = async (droplet, client) => {
   }
 }
 
+
+/**
+ * Create a shallow wrapper around fetch to make requests to digitalocean
+ *
+ * @param {string} token the digitalocean token
+ *
+ * @returns {function} a fetch API wrapper
+ */
+api.client = token => ({ method = 'GET', path, headers, body }) => {
+  const url = path.startsWith('/')
+    ? `${constants.urls.digitalocean}${path}`
+    : `${constants.urls.digitalocean}/${path}`
+
+  const config = {
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`
+    }
+  }
+
+  if (body) {
+    config.body = JSON.stringify(body)
+  }
+
+  return fetch(url, {
+    ...config,
+    method,
+  })
+}
+
 module.exports = api
