@@ -31,7 +31,12 @@ const constants = {
   },
   sshKeys: {
     shared: 'shared-minecraft'
-  }
+  },
+  zeitEnvVariables: [
+    'TOKEN',
+    'BASIC_AUTH_USER',
+    'BASIC_AUTH_PASS'
+  ]
 }
 
 constants.vmConfig = {

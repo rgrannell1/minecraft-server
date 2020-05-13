@@ -1,8 +1,5 @@
 
-
-const fs = require('fs').promises
 const constants = require('../commons/constants')
-const clic = require('cloud-init-compile')
 
 const api = {}
 

@@ -1,0 +1,13 @@
+{
+  "name": "deprovisioner",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {},
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@rgrannell/errors": "^9.1.0",
+    "basic-auth": "^2.0.1"
+  }
+}

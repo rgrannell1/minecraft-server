@@ -73,7 +73,11 @@ const state = {
   lastActive: Date.now()
 }
 
-const handleInactiveState = state => {
+const beginShutdown = () => {
+
+}
+
+const handleInactiveState = async state => {
   let now = Date.now()
 
   let diffMs = now - state.lastActive
@@ -84,15 +88,7 @@ const handleInactiveState = state => {
   if (diffMs > constants.timers.shutdownMs) {
     console.log(`${timestamp()}: server inactive; triggering deprovisioning`)
 
-    exec('poweroff', (err, stdout, stderr) => {
-      if (err) {
-        console.error(err)
-        process.exit(1)
-      }
-
-      process.stdout.pipe(stdout)
-      process.stderr.pipe(stderr)
-    })
+    await beginShutdown()
   }
 }
 
@@ -107,7 +103,7 @@ command.task = async () => {
 
   if (!serverData) {
     console.log(`${timestamp()}: failed to connect to server`)
-    handleInactiveState(state)
+    await handleInactiveState(state)
 
   } else if (serverData.online && serverData.online > 0) {
     // -- server is active
@@ -117,7 +113,7 @@ command.task = async () => {
 
   } else {
     // -- server is inactive
-    handleInactiveState(state)
+    await handleInactiveState(state)
   }
 
   setTimeout(() => main(), 15000)
