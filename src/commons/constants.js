@@ -6,7 +6,9 @@ const path = require('path')
  */
 const constants = {
   paths: {
-    env: path.resolve(path.join(__dirname, '../../.env'))
+    env: path.resolve(path.join(__dirname, '../.env')),
+    configurePlaybook: path.join(__dirname, '../ansible/configure.yaml'),
+    inventory: path.join(__dirname, '../ansible/inventory.py'),
   },
   urls: {
     digitalocean: 'https://api.digitalocean.com/v2'

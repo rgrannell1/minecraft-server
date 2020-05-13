@@ -2,6 +2,7 @@
 const fs = require('fs').promises
 const path = require('path')
 const fetch = require('node-fetch')
+const execa = require('execa')
 
 const log = require('../commons/log')
 const constants = require('../commons/constants')
@@ -28,7 +29,9 @@ preprocess.env = async () => {
     process.exit(1)
   }
 
-  return require('dotenv').config().parsed
+  return require('dotenv').config({
+    path: constants.paths.env
+  }).parsed
 }
 
 /**
@@ -46,8 +49,15 @@ const minecraftServer = async args => {
     const address = await actions.createFloatingIp(droplet, client)
     await actions.validateInstall(address, env.SSH_PASSWORD, client)
 
-    // todo remove.
-    console.log('deleting')
+    const cmd = execa('ansible-playbook', [constants.paths.configurePlaybook, '-i', constants.paths.inventory], {
+      env: {
+        DROPLET_IP: address,
+        DROPLET_ID: droplet.id
+      }
+    })
+
+    cmd.stdout.pipe(process.stdout)
+    cmd.stderr.pipe(process.stderr)
 
     /**
 

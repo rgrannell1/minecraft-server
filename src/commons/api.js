@@ -1,4 +1,5 @@
 
+const fetch = require('node-fetch')
 const constants = require('../commons/constants')
 
 const api = {}

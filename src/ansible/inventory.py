@@ -9,6 +9,9 @@ import os
 from dotenv import load_dotenv
 load_dotenv()
 
+def get_droplet_id ():
+  return os.getenv("DROPLET_ID")
+
 def get_droplet_ip ():
   return os.getenv("DROPLET_IP")
 
