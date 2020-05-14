@@ -77,6 +77,11 @@
         src: start-minecraft.sh
         dest: /home/minecraftuser/start-minecraft.sh
 
+    - name: Copy deprovision to the server
+      copy:
+        src: deprovision.sh
+        dest: /home/minecraftuser/deprovision.sh
+
     - name: Copy server-properties to the server
       copy:
         src: server.properties

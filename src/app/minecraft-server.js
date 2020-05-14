@@ -59,20 +59,10 @@ const minecraftServer = async args => {
     cmd.stdout.pipe(process.stdout)
     cmd.stderr.pipe(process.stderr)
 
-    /**
-
-
-     const res = await client({
-       method: 'DELETE',
-      path: `/droplets/${droplet.id}`
-    })
-
-    if (!res.ok) {
-      throw res
-    }
-*/
+    await cmd
 
     console.log('done')
+    process.exit(0)
 
   } else if (args.destroy) {
     await actions.destroyDroplet(client)
