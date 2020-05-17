@@ -1,8 +1,10 @@
 
 const MinecraftQuery = require('minecraft-query')
 const psList = require('ps-list')
+const btoa = require('btoa')
 const dayjs = require('dayjs')
 const fetch = require('node-fetch')
+const execa = require('execa')
 
 const constants = require('../shared/constants')
 

@@ -16,6 +16,9 @@ const errors = require('@rgrannell/errors')
 const postPause = (req, res) => {
   const client = api.client(process.env.TOKEN)
 
+  // await shutdown
+  // snapshot
+
 
 }
 
