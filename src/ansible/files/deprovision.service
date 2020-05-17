@@ -4,8 +4,8 @@ Description=Deprovision the minecraft server when inactive
 
 [Service]
 WorkingDirectory=/home/minecraftuser
-User=minecraftuser
 
+User=root
 KillMode=process
 KillSignal=SIGINT
 
