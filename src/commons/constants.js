@@ -26,7 +26,7 @@ const constants = {
   },
   retries: {
     assignIp: 25,
-    ssh: 5
+    ssh: 10
   },
   os: {
     ubuntu: 'ubuntu-16-04-x64'

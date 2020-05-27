@@ -250,6 +250,24 @@ api.deleteDroplet = async (droplet, client) => {
   }
 }
 
+api.startDroplet = async (droplet, client) => {
+  const body = {
+    type: 'power_on',
+  }
+
+  const res = await client({
+    method: 'POST',
+    path: `/droplets/${droplet.id}/actions`,
+    body
+  })
+
+  if (!res.ok) {
+    throw res
+  }
+
+  const { action } = await res.json()
+  return action
+}
 
 /**
  * Create a shallow wrapper around fetch to make requests to digitalocean

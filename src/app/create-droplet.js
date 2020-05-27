@@ -36,7 +36,15 @@ const recreateDroplet = async client => {
   const existingDroplet = await api.getDroplet(constants.vms.name, client)
 
   if (existingDroplet) {
-    log.success('VM already exists')
+    if (existingDroplet.status === 'off') {
+      log.success('VM already exists; powering on')
+      await api.startDroplet(existingDroplet, client)
+      log.success('VM powered on')
+    } else if (existingDroplet.status === 'on') {
+      log.success('VM already exists and is turned on')
+    } else {
+      log.success(`VM already exists (status ${existingDroplet.status})`)
+    }
 
     return {
       droplet: existingDroplet
