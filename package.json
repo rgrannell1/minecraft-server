@@ -27,7 +27,7 @@
     "dotenv": "^8.2.0",
     "execa": "^4.0.1",
     "neodoc": "^2.0.2",
-    "node-fetch": "^2.6.0",
+    "node-fetch": "^2.6.1",
     "node-ssh": "^9.0.0"
   },
   "devDependencies": {
