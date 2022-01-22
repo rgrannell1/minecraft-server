@@ -13,7 +13,7 @@
     "dayjs": "^1.8.23",
     "dotenv": "^8.2.0",
     "minecraft-query": "^1.0.9",
-    "node-fetch": "^2.6.0",
+    "node-fetch": "^3.1.1",
     "ps-list": "^7.0.0",
     "btoa": "*",
     "execa": "*"
